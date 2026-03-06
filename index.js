@@ -6,44 +6,6 @@ const timeInput = document.getElementById('time');
 const textInput = document.getElementById("text");
 const lengthEl = document.getElementById("length");
 
-// 文章入力イベントリスナーを追加
-textInput.addEventListener("input", () => {
-    lastEdited = "text";   // どの入力がトリガーかを記録
-    localStorage.setItem("SpeechGuideText", textInput.value);
-    update();
-});
-
-// 速度入力イベントリスナーを追加
-speedInput.addEventListener('input', () => {
-    lastEdited = 'speed';
-    update();
-});
-
-// 時間入力イベントリスナーを追加
-timeInput.addEventListener('input', () => {
-    lastEdited = 'time';
-    update();
-});
-
-/**
- * ハイライト処理。現在の秒数に応じて、該当するブロックをハイライトする。
- * @param {number} sec - 現在の秒数
- */
-function highlightCurrentBlock(sec) {
-    const blocks = document.querySelectorAll(".block");
-
-    blocks.forEach(block => {
-        const start = Number(block.dataset.start);
-        const end = Number(block.dataset.end);
-
-        if (sec >= start && sec < end) {
-            block.style.background = "#ffe9a8"; // ハイライト色
-        } else {
-            block.style.background = ""; // 元に戻す
-        }
-    });
-}
-
 /**
  * ハイライト処理。現在の秒数に応じて、該当する文字をハイライトする。
  * @param {number} sec - 現在の秒数
@@ -76,6 +38,46 @@ document.getElementById("play").addEventListener("click", () => {
         currentSec += 0.05; // 精度を上げる
     }, 50);
 });
+
+/**
+ * 文字数と速度から時間を計算する。
+ * @param {number} charCount - 文字数
+ * @param {number} speed - 速度（文字/分）
+ * @returns {number} 時間（分）
+ */
+function calcTimeFromSpeed(charCount, speed) {
+    return charCount / speed; // 分
+}
+
+/**
+ * 文字数と時間を使用して速度を計算する。
+ * @param {number} charCount - 文字数
+ * @param {number} timeMinutes - 時間（分）
+ * @returns {number} 速度（文字/分）
+ */
+function calcSpeedFromTime(charCount, timeMinutes) {
+    return charCount / timeMinutes; // 文字/分
+}
+
+/**
+ * 秒数を「分:秒」形式の文字列に変換する。
+ * @param {number} seconds - 秒数
+ * @returns {string} 「分:秒」形式の文字列
+ */
+function formatTime(seconds) {
+    const m = Math.floor(seconds / 60);
+    const s = Math.round(seconds % 60);
+    return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+/**
+ * 文字数を取得する。
+ * @returns {number} 文字数
+ */
+function getCharCount() {
+    const text = document.getElementById("text").value;
+    return text.replace(/\s/g, "").length;
+}
 
 /**
  * 更新処理。どちらかの入力が変更されたときに呼び出される。
@@ -145,45 +147,24 @@ function update() {
     });
 }
 
-/**
- * 文字数を取得する。
- * @returns {number} 文字数
- */
-function getCharCount() {
-    const text = document.getElementById("text").value;
-    return text.replace(/\s/g, "").length;
-}
+// 文章入力イベントリスナーを追加
+textInput.addEventListener("input", () => {
+    lastEdited = "text";   // どの入力がトリガーかを記録
+    localStorage.setItem("SpeechGuideText", textInput.value);
+    update();
+});
 
-/**
- * 文字数と速度から時間を計算する。
- * @param {number} charCount - 文字数
- * @param {number} speed - 速度（文字/分）
- * @returns {number} 時間（分）
- */
-function calcTimeFromSpeed(charCount, speed) {
-    return charCount / speed; // 分
-}
+// 速度入力イベントリスナーを追加
+speedInput.addEventListener('input', () => {
+    lastEdited = 'speed';
+    update();
+});
 
-/**
- * 文字数と時間を使用して速度を計算する。
- * @param {number} charCount - 文字数
- * @param {number} timeMinutes - 時間（分）
- * @returns {number} 速度（文字/分）
- */
-function calcSpeedFromTime(charCount, timeMinutes) {
-    return charCount / timeMinutes; // 文字/分
-}
-
-/**
- * 秒数を「分:秒」形式の文字列に変換する。
- * @param {number} seconds - 秒数
- * @returns {string} 「分:秒」形式の文字列
- */
-function formatTime(seconds) {
-    const m = Math.floor(seconds / 60);
-    const s = Math.round(seconds % 60);
-    return `${m}:${s.toString().padStart(2, '0')}`;
-}
+// 時間入力イベントリスナーを追加
+timeInput.addEventListener('input', () => {
+    lastEdited = 'time';
+    update();
+});
 
 window.addEventListener("DOMContentLoaded", () => {
     const saved = localStorage.getItem("SpeechGuideText");
