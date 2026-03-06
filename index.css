@@ -27,3 +27,9 @@ textarea {
     z-index: 1000;
     border-bottom: 1px solid #ddd;
 }
+
+#speed,
+#time {
+    width: 60px;
+    text-align: center;
+}
