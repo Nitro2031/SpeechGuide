@@ -81,7 +81,7 @@ function update() {
         div.className = 'block';
         div.innerHTML = `
       <div class="time">#${index + 1} ${formatTime(start)} 〜 ${formatTime(end)} （約 ${info.seconds.toFixed(1)} 秒）</div>
-      <div>${info.block.substring(0, 80)}${info.block.length > 80 ? '…' : ''}</div>
+      <div>${info.block}</div>
     `;
         resultEl.appendChild(div);
     });
