@@ -4,6 +4,7 @@ let lastEdited = null;
 const speedInput = document.getElementById('speed');
 const timeInput = document.getElementById('time');
 const textInput = document.getElementById("text");
+const lengthEl = document.getElementById("length");
 
 // 文章入力イベントリスナーを追加
 textInput.addEventListener("input", () => {
@@ -32,6 +33,7 @@ timeInput.addEventListener('input', () => {
  */
 function update() {
     const charCount = getCharCount();
+    lengthEl.textContent = `（${charCount} 文字）`;
 
     if (lastEdited === "text" || lastEdited === "speed") {
         const speed = Number(speedInput.value);
