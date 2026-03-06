@@ -64,14 +64,6 @@ function update() {
         return { block, len, seconds };
     });
 
-    const totalMinutesNeeded = totalSeconds / 60;
-    const diff = totalMinutesNeeded - totalMinutes;
-
-    summaryEl.innerHTML = `
-    想定合計時間: ${totalMinutesNeeded.toFixed(1)} 分<br>
-    持ち時間との差: ${diff >= 0 ? '+' : ''}${diff.toFixed(1)} 分
-`;
-
     blockInfos.forEach((info, index) => {
         const start = currentTime;
         const end = currentTime + info.seconds;
