@@ -22,6 +22,7 @@ function highlightCurrentChar(sec) {
 
         if (sec >= start && sec < end) {
             span.style.backgroundColor = "#ffe9a8";
+            active = span;
         } else {
             span.style.backgroundColor = "";
         }
