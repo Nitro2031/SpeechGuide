@@ -52,7 +52,6 @@ function update() {
 
     const blocks = text.split(/\n+/).filter(b => b.trim().length > 0);
     const resultEl = document.getElementById('result');
-    const summaryEl = document.getElementById('summary');
     resultEl.innerHTML = '';
 
     let currentTime = 0;
