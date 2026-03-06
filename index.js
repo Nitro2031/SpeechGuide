@@ -109,7 +109,7 @@ function update() {
     blockInfos.forEach((info, index) => {
         const start = currentTime;
         const end = currentTime + info.seconds;
-        currentTime = end;
+        currentTime = end + 180 / speed; // ブロック間の空白時間（3字相当）
 
         const div = document.createElement('div');
         div.className = 'block';
