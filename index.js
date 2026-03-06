@@ -1,3 +1,76 @@
+let lastEdited = null;
+
+// 入力要素を取得
+const speedInput = document.getElementById('speed');
+const timeInput = document.getElementById('time');
+
+// 速度入力イベントリスナーを追加
+speedInput.addEventListener('input', () => {
+    lastEdited = 'speed';
+    update();
+});
+
+// 時間入力イベントリスナーを追加
+timeInput.addEventListener('input', () => {
+    lastEdited = 'time';
+    update();
+});
+
+/**
+ * 更新処理。どちらかの入力が変更されたときに呼び出される。
+ * 文字数を取得し、変更された方に応じてもう一方を計算して更新する。
+ * - speedが変更された場合、timeを計算して更新
+ * - timeが変更された場合、speedを計算して更新
+ * どちらも変更された場合は、最後に変更された方を優先する。
+ */
+function update() {
+    const charCount = getCharCount();
+
+    if (lastEdited === 'speed') {
+        const speed = Number(speedInput.value);
+        timeInput.value = calcTimeFromSpeed(charCount, speed).toFixed(2);
+    }
+
+    if (lastEdited === 'time') {
+        const time = Number(timeInput.value);
+        speedInput.value = calcSpeedFromTime(charCount, time).toFixed(0);
+    }
+}
+
+/**
+ * 文字数を取得する。
+ * @returns {number} 文字数
+ */
+function getCharCount() {
+    const text = document.getElementById("text").value;
+    return text.replace(/\s/g, "").length;
+}
+
+/**
+ * 文字数と速度から時間を計算する。
+ * @param {number} charCount - 文字数
+ * @param {number} speed - 速度（文字/分）
+ * @returns {number} 時間（分）
+ */
+function calcTimeFromSpeed(charCount, speed) {
+    return charCount / speed; // 分
+}
+
+/**
+ * 文字数と時間を使用して速度を計算する。
+ * @param {number} charCount - 文字数
+ * @param {number} timeMinutes - 時間（分）
+ * @returns {number} 速度（文字/分）
+ */
+function calcSpeedFromTime(charCount, timeMinutes) {
+    return charCount / timeMinutes; // 文字/分
+}
+
+/**
+ * 秒数を「分:秒」形式の文字列に変換する。
+ * @param {number} seconds - 秒数
+ * @returns {string} 「分:秒」形式の文字列
+ */
 function formatTime(seconds) {
     const m = Math.floor(seconds / 60);
     const s = Math.round(seconds % 60);
@@ -7,7 +80,7 @@ function formatTime(seconds) {
 document.getElementById('calc').addEventListener('click', () => {
     const text = document.getElementById('text').value.trim();
     const speed = Number(document.getElementById('speed').value); // chars per minute
-    const totalMinutes = Number(document.getElementById('totalMinutes').value);
+    const totalMinutes = Number(document.getElementById('time').value);
 
     const blocks = text.split(/\n+/).filter(b => b.trim().length > 0); // 段落ごと
     const resultEl = document.getElementById('result');
