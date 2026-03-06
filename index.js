@@ -44,15 +44,37 @@ function highlightCurrentBlock(sec) {
     });
 }
 
+/**
+ * ハイライト処理。現在の秒数に応じて、該当する文字をハイライトする。
+ * @param {number} sec - 現在の秒数
+ */
+function highlightCurrentChar(sec) {
+    const chars = document.querySelectorAll(".char");
+
+    chars.forEach(span => {
+        const start = Number(span.dataset.start);
+        const end = start + (60 / Number(speedInput.value));
+
+        if (sec >= start && sec < end) {
+            span.style.backgroundColor = "#ffe9a8";
+        } else {
+            span.style.backgroundColor = "";
+        }
+    });
+}
+
 let timer = null;
 let currentSec = 0;
 
 document.getElementById("play").addEventListener("click", () => {
     currentSec = 0;
+
+    if (timer) clearInterval(timer);
+
     timer = setInterval(() => {
-        highlightCurrentBlock(currentSec);
-        currentSec += 0.1;
-    }, 100);
+        highlightCurrentChar(currentSec);
+        currentSec += 0.05; // 精度を上げる
+    }, 50);
 });
 
 /**
@@ -100,16 +122,27 @@ function update() {
         currentTime = end;
 
         const div = document.createElement('div');
-        div.dataset.start = start;
-        div.dataset.end = end;
         div.className = 'block';
+
+        // 文字ごとに span を生成
+        const chars = info.block.split('');
+        let charHtml = '';
+        let charStart = start;
+        const secPerChar = 60 / speed;
+
+        chars.forEach((ch, i) => {
+            const span = `<span class="char" data-start="${charStart}">${ch}</span>`;
+            charHtml += span;
+            charStart += secPerChar;
+        });
+
         div.innerHTML = `
-      <div class="time">#${index + 1} ${formatTime(start)} 〜 ${formatTime(end)} （約 ${info.seconds.toFixed(1)} 秒）</div>
-      <div>${info.block}</div>
+        <div class="time">#${index + 1} ${formatTime(start)} 〜 ${formatTime(end)} （約 ${info.seconds.toFixed(1)} 秒）</div>
+        <div class="text">${charHtml}</div>
     `;
+
         resultEl.appendChild(div);
     });
-
 }
 
 /**
