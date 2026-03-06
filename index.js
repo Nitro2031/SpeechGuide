@@ -3,6 +3,13 @@ let lastEdited = null;
 // 入力要素を取得
 const speedInput = document.getElementById('speed');
 const timeInput = document.getElementById('time');
+const textInput = document.getElementById("text");
+
+// 文章入力イベントリスナーを追加
+textInput.addEventListener("input", () => {
+    lastEdited = "text";   // どの入力がトリガーかを記録
+    update();
+});
 
 // 速度入力イベントリスナーを追加
 speedInput.addEventListener('input', () => {
