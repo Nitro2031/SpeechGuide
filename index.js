@@ -1,10 +1,13 @@
-let lastEdited = "text";
 
 // 入力要素を取得
 const speedInput = document.getElementById('speed');
 const timeInput = document.getElementById('time');
 const textInput = document.getElementById("text");
 const lengthEl = document.getElementById("length");
+
+let lastEdited = "text";
+let timer = null;
+let currentSec = 0;
 
 /**
  * ハイライト処理。現在の秒数に応じて、該当する文字をハイライトする。
@@ -24,20 +27,6 @@ function highlightCurrentChar(sec) {
         }
     });
 }
-
-let timer = null;
-let currentSec = 0;
-
-document.getElementById("play").addEventListener("click", () => {
-    currentSec = 0;
-
-    if (timer) clearInterval(timer);
-
-    timer = setInterval(() => {
-        highlightCurrentChar(currentSec);
-        currentSec += 0.05; // 精度を上げる
-    }, 50);
-});
 
 /**
  * 文字数と速度から時間を計算する。
@@ -164,6 +153,17 @@ speedInput.addEventListener('input', () => {
 timeInput.addEventListener('input', () => {
     lastEdited = 'time';
     update();
+});
+
+document.getElementById("play").addEventListener("click", () => {
+    currentSec = 0;
+
+    if (timer) clearInterval(timer);
+
+    timer = setInterval(() => {
+        highlightCurrentChar(currentSec);
+        currentSec += 0.05; // 精度を上げる
+    }, 50);
 });
 
 window.addEventListener("DOMContentLoaded", () => {
