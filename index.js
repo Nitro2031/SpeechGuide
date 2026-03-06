@@ -1,4 +1,4 @@
-let lastEdited = null;
+let lastEdited = "text";
 
 // 入力要素を取得
 const speedInput = document.getElementById('speed');
@@ -9,6 +9,7 @@ const lengthEl = document.getElementById("length");
 // 文章入力イベントリスナーを追加
 textInput.addEventListener("input", () => {
     lastEdited = "text";   // どの入力がトリガーかを記録
+    localStorage.setItem("SpeechGuideText", textInput.value);
     update();
 });
 
@@ -119,3 +120,11 @@ function formatTime(seconds) {
     const s = Math.round(seconds % 60);
     return `${m}:${s.toString().padStart(2, '0')}`;
 }
+
+window.addEventListener("DOMContentLoaded", () => {
+    const saved = localStorage.getItem("SpeechGuideText");
+    if (saved !== null) {
+        textInput.value = saved;
+    }
+    update(); // 復元後に計算も反映
+});
