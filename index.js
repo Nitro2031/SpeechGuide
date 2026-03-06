@@ -4,6 +4,8 @@ const speedInput = document.getElementById('speed');
 const timeInput = document.getElementById('time');
 const textInput = document.getElementById("text");
 const lengthEl = document.getElementById("length");
+const currentTimeEl = document.getElementById("currentTime");
+const toggleBtn = document.getElementById("play");
 
 let lastEdited = "text";
 let timer = null;
@@ -35,6 +37,17 @@ function highlightCurrentChar(sec) {
             block: "center"
         });
     }
+    updateCurrentTimeDisplay(sec);
+}
+
+/**
+ * 現在の時間を表示する。
+ * @param {number} sec - 現在の秒数
+ */
+function updateCurrentTimeDisplay(sec) {
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    currentTimeEl.textContent = `${m}:${s.toString().padStart(2, "0")}`;
 }
 
 /**
@@ -163,15 +176,27 @@ timeInput.addEventListener('input', () => {
     update();
 });
 
-document.getElementById("play").addEventListener("click", () => {
+document.getElementById("stop").addEventListener("click", () => {
     currentSec = 0;
 
     if (timer) clearInterval(timer);
+    highlightCurrentChar(currentSec);
+    toggleBtn.textContent = "▶ 再生";
+    timer = null;
+});
 
-    timer = setInterval(() => {
-        highlightCurrentChar(currentSec);
-        currentSec += 0.05; // 精度を上げる
-    }, 50);
+toggleBtn.addEventListener("click", () => {
+    if (timer) {
+        clearInterval(timer);
+        timer = null;
+        toggleBtn.textContent = "▶ 再開";
+    } else {
+        toggleBtn.textContent = "⏸ 一時停止";
+        timer = setInterval(() => {
+            highlightCurrentChar(currentSec);
+            currentSec += 0.05; // 精度を上げる
+        }, 50);
+    }
 });
 
 window.addEventListener("DOMContentLoaded", () => {

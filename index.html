@@ -13,14 +13,17 @@
     <label>読み上げる文章</label><span id="length"></span><br>
     <textarea id="text"></textarea><br><br>
 
-    <label>読み上げ速度（文字/分）</label><br>
-    <input type="number" id="speed" value="400"><br><br>
+    <div id="playerControls">
+      <label>読み上げ速度（文字/分）</label><br>
+      <input type="number" id="speed" value="400"><br><br>
 
-    <label>持ち時間（分）</label><br>
-    <input type="number" id="time"><br><br>
+      <label>持ち時間（分）</label><br>
+      <input type="number" id="time"><br><br>
 
-    <button id="play">▶ 再生</button>
-    <h2>結果</h2>
+      <button id="play">▶ 再生</button>
+      <button id="stop">⏹ 停止</button>
+      <div id="currentTime">0:00</div>
+    </div>
     <div id="result"></div>
 
     <script src="index.js"></script>
