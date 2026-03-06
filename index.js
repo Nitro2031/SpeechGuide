@@ -26,6 +26,14 @@ function highlightCurrentChar(sec) {
             span.style.backgroundColor = "";
         }
     });
+
+    // ★ ハイライトされた文字へ自動スクロール
+    if (active) {
+        active.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }
 }
 
 /**
