@@ -26,6 +26,36 @@ timeInput.addEventListener('input', () => {
 });
 
 /**
+ * ハイライト処理。現在の秒数に応じて、該当するブロックをハイライトする。
+ * @param {number} sec - 現在の秒数
+ */
+function highlightCurrentBlock(sec) {
+    const blocks = document.querySelectorAll(".block");
+
+    blocks.forEach(block => {
+        const start = Number(block.dataset.start);
+        const end = Number(block.dataset.end);
+
+        if (sec >= start && sec < end) {
+            block.style.background = "#ffe9a8"; // ハイライト色
+        } else {
+            block.style.background = ""; // 元に戻す
+        }
+    });
+}
+
+let timer = null;
+let currentSec = 0;
+
+document.getElementById("play").addEventListener("click", () => {
+    currentSec = 0;
+    timer = setInterval(() => {
+        highlightCurrentBlock(currentSec);
+        currentSec += 0.1;
+    }, 100);
+});
+
+/**
  * 更新処理。どちらかの入力が変更されたときに呼び出される。
  * 文字数を取得し、変更された方に応じてもう一方を計算して更新する。
  * - speedが変更された場合、timeを計算して更新
@@ -70,6 +100,8 @@ function update() {
         currentTime = end;
 
         const div = document.createElement('div');
+        div.dataset.start = start;
+        div.dataset.end = end;
         div.className = 'block';
         div.innerHTML = `
       <div class="time">#${index + 1} ${formatTime(start)} 〜 ${formatTime(end)} （約 ${info.seconds.toFixed(1)} 秒）</div>
