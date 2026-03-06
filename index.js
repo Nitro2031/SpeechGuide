@@ -91,7 +91,6 @@ function update() {
 
     const text = document.getElementById('text').value.trim();
     const speed = Number(document.getElementById('speed').value);
-    const totalMinutes = Number(document.getElementById('time').value);
 
     const blocks = text.split(/\n+/).filter(b => b.trim().length > 0);
     const resultEl = document.getElementById('result');
